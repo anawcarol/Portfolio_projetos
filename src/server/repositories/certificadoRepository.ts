@@ -28,6 +28,7 @@ export const certificadoRepository = {
   async create(certificado: {
     nome: string;
     profile_id: number;
+    imagem_url?: string;
   }) {
 
     const { data, error } = await supabase
@@ -60,6 +61,7 @@ export const certificadoRepository = {
     id: number,
     dados: {
       nome?: string;
+      imagem_url?: string;
     }
   ) {
 

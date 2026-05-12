@@ -29,7 +29,7 @@ export const skillService = {
   /*
     Cria nova skill.
   */
-  async createSkill(nome: string) {
+  async createSkill(nome: string, icon?: string) {
 
     /*
       Regra:
@@ -39,12 +39,19 @@ export const skillService = {
       throw new Error("Nome da skill é obrigatório");
     }
 
+    if (!icon?.trim()) {
+      throw new Error(
+        "Ícone obrigatório"
+      );
+    }
+
 
 
     /*
       Remove espaços desnecessários.
     */
     const nomeFormatado = nome.trim();
+    const iconFormatado = icon.trim();
 
 
 
@@ -74,50 +81,55 @@ export const skillService = {
     /*
       Repository apenas salva.
     */
-    return await skillRepository.create(
-      nomeFormatado
-    );
+
+
+    return await skillRepository.create({
+      nome: nomeFormatado,
+      icon: iconFormatado
+    });
+
   },
 
+  
 
 
   /*
     Atualiza skill.
   */
   async updateSkill(
-    id: number,
-    nome: string
-  ) {
+      id: number,
+      nome: string
+    ) {
 
-    if (!id) {
-      throw new Error("ID inválido");
-    }
-
-    if (!nome || nome.trim() === "") {
-      throw new Error("Nome obrigatório");
-    }
-
-
-
-    /*
-      Verifica existência.
-    */
-    const skill =
-      await skillRepository.findById(id);
-
-    if (!skill) {
-      throw new Error("Skill não encontrada");
-    }
-
-
-
-    return await skillRepository.update(
-      id,
-      {
-        nome: nome.trim()
+      if (!id) {
+        throw new Error("ID inválido");
       }
-    );
-  },
+
+      if (!nome || nome.trim() === "") {
+        throw new Error("Nome obrigatório");
+      }
+
+
+
+      /*
+        Verifica existência.
+      */
+      const skill =
+        await skillRepository.findById(id);
+
+      if (!skill) {
+        throw new Error("Skill não encontrada");
+      }
+
+
+
+      return await skillRepository.update(
+        id,
+        {
+          nome: nome.trim()
+        }
+      );
+    },
 
 
 
@@ -126,19 +138,19 @@ export const skillService = {
   */
   async deleteSkill(id: number) {
 
-    if (!id) {
-      throw new Error("ID inválido");
+      if (!id) {
+        throw new Error("ID inválido");
+      }
+
+
+
+      /*
+        Futuramente:
+        verificar se está vinculada
+        a projetos.
+      */
+
+      await skillRepository.delete(id);
     }
 
-
-
-    /*
-      Futuramente:
-      verificar se está vinculada
-      a projetos.
-    */
-
-    await skillRepository.delete(id);
-  }
-
-};
+  };

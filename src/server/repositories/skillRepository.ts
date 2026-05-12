@@ -1,18 +1,8 @@
 import { supabase } from "@/lib/supabase";
 
 /*
-  Repository responsável SOMENTE pela tabela "skills".
-
-  Ele:
-  - busca skills
-  - cria skills
-  - atualiza skills
-  - remove skills
-
-  Ele NÃO:
-  - valida regra de negócio
-  - verifica autenticação
-  - decide fluxo do sistema
+  Repository responsável SOMENTE
+  pela tabela "skills".
 */
 
 export const skillRepository = {
@@ -36,7 +26,7 @@ export const skillRepository = {
 
 
   /*
-    Busca uma skill pelo ID.
+    Busca skill pelo ID.
   */
   async findById(id: number) {
 
@@ -56,15 +46,16 @@ export const skillRepository = {
 
 
   /*
-    Cria uma nova skill.
+    Cria nova skill.
   */
-  async create(nome: string) {
+  async create(skill: {
+    nome: string;
+    icon: string;
+  }) {
 
     const { data, error } = await supabase
       .from("skills")
-      .insert({
-        nome
-      })
+      .insert(skill)
       .select()
       .single();
 
@@ -78,12 +69,13 @@ export const skillRepository = {
 
 
   /*
-    Atualiza uma skill existente.
+    Atualiza skill.
   */
   async update(
     id: number,
     dados: {
       nome?: string;
+      icon?: string;
     }
   ) {
 
@@ -104,7 +96,7 @@ export const skillRepository = {
 
 
   /*
-    Remove uma skill pelo ID.
+    Remove skill.
   */
   async delete(id: number) {
 

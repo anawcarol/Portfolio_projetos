@@ -1,8 +1,8 @@
 import { projetoRepository }
-from "../repositories/projetoRepository";
+  from "../repositories/projetoRepository";
 
 import { skillRepository }
-from "../repositories/skillRepository";
+  from "../repositories/skillRepository";
 
 /*
   Service responsável pelos projetos.
@@ -11,11 +11,25 @@ from "../repositories/skillRepository";
 export const projetoService = {
 
   /*
-    Lista projetos com skills.
+    Lista projetos.
   */
   async getAllProjects() {
 
     return await projetoRepository.findAll();
+  },
+
+
+
+  /*
+    Busca projeto por ID.
+  */
+  async getProjectById(id: number) {
+
+    if (!id) {
+      throw new Error("ID inválido");
+    }
+
+    return await projetoRepository.findById(id);
   },
 
 
@@ -26,47 +40,60 @@ export const projetoService = {
   async createProject(data: {
     titulo: string;
     descricao: string;
+    link: string;
     profile_id: number;
     skillIds: number[];
   }) {
 
     /*
-      Regra:
-      título obrigatório.
+      Título obrigatório.
     */
     if (!data.titulo?.trim()) {
-      throw new Error("Título obrigatório");
-    }
-
-
-
-    /*
-      Regra:
-      descrição obrigatória.
-    */
-    if (!data.descricao?.trim()) {
-      throw new Error("Descrição obrigatória");
-    }
-
-
-
-    /*
-      Regra:
-      projeto deve possuir skills.
-    */
-    if (
-      !data.skillIds ||
-      data.skillIds.length === 0
-    ) {
       throw new Error(
-        "Projeto deve possuir ao menos uma skill"
+        "Título obrigatório"
       );
     }
 
 
 
     /*
-      Valida existência das skills.
+      Descrição obrigatória.
+    */
+    if (!data.descricao?.trim()) {
+      throw new Error(
+        "Descrição obrigatória"
+      );
+    }
+
+
+
+    /*
+      Link obrigatório.
+    */
+    if (!data.link?.trim()) {
+      throw new Error(
+        "Link obrigatório"
+      );
+    }
+
+
+
+    /*
+      Projeto deve possuir skills.
+    */
+    if (
+      !data.skillIds ||
+      data.skillIds.length === 0
+    ) {
+      throw new Error(
+        "Projeto deve possuir skills"
+      );
+    }
+
+
+
+    /*
+      Valida skills.
     */
     for (const skillId of data.skillIds) {
 
@@ -89,13 +116,14 @@ export const projetoService = {
       await projetoRepository.create({
         titulo: data.titulo.trim(),
         descricao: data.descricao.trim(),
-        profile_id: data.profile_id
+        profile_id: data.profile_id,
+        link: data.link.trim()
       });
 
 
 
     /*
-      Relaciona skills.
+      Vincula skills.
     */
     await projetoRepository.attachSkills(
       projeto.id,
@@ -105,6 +133,94 @@ export const projetoService = {
 
 
     return projeto;
+  },
+
+
+
+  /*
+    Atualiza projeto.
+  */
+  async updateProject(
+    id: number,
+    data: {
+      titulo?: string;
+      descricao?: string;
+      skillIds?: number[];
+    }
+  ) {
+
+    if (!id) {
+      throw new Error("ID inválido");
+    }
+
+
+
+    /*
+      Verifica existência.
+    */
+    const projeto =
+      await projetoRepository.findById(id);
+
+    if (!projeto) {
+      throw new Error(
+        "Projeto não encontrado"
+      );
+    }
+
+
+
+    /*
+      Atualiza projeto.
+    */
+    const projetoAtualizado =
+      await projetoRepository.update(
+        id,
+        {
+          titulo: data.titulo?.trim(),
+          descricao: data.descricao?.trim()
+        }
+      );
+
+
+
+    /*
+      Atualiza skills.
+    */
+    if (data.skillIds) {
+
+      /*
+        Remove relações antigas.
+      */
+      await projetoRepository.clearSkills(id);
+
+
+
+      /*
+        Cria novas relações.
+      */
+      await projetoRepository.attachSkills(
+        id,
+        data.skillIds
+      );
+    }
+
+
+
+    return projetoAtualizado;
+  },
+
+
+
+  /*
+    Remove projeto.
+  */
+  async deleteProject(id: number) {
+
+    if (!id) {
+      throw new Error("ID inválido");
+    }
+
+    await projetoRepository.delete(id);
   }
 
 };

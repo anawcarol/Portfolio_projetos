@@ -36,7 +36,8 @@ export const certificadoService = {
   */
   async createCertificate(
     nome: string,
-    profile_id: number
+    profile_id: number,
+    imagem_url?: string
   ) {
 
     /*
@@ -68,7 +69,8 @@ export const certificadoService = {
     */
     return await certificadoRepository.create({
       nome: nome.trim(),
-      profile_id
+      profile_id,
+      imagem_url
     });
   },
 

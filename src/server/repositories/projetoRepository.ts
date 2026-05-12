@@ -18,6 +18,8 @@ export const projetoRepository = {
         titulo,
         descricao,
         data_criacao,
+        link,
+        profile_id,
 
         projeto_skills (
           skills (
@@ -48,6 +50,8 @@ export const projetoRepository = {
         titulo,
         descricao,
         data_criacao,
+        link,
+        profile_id,
 
         projeto_skills (
           skills (
@@ -74,6 +78,7 @@ export const projetoRepository = {
   async create(projeto: {
     titulo: string;
     descricao: string;
+    link: string;
     profile_id: number;
   }) {
 
@@ -100,6 +105,7 @@ export const projetoRepository = {
     dados: {
       titulo?: string;
       descricao?: string;
+      link?: string;
     }
   ) {
 

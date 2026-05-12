@@ -1,8 +1,6 @@
 export interface Certificado {
   id: number;
   nome: string;
-  instituicao: string;
-  data: string;
-  link: string;
-  imagem: ImageBitmap;
+  profile_id: number;
+  imagem_url?: string;
 }

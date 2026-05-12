@@ -1,8 +1,8 @@
 export interface Projeto {
   id: number;
-  nome: string;
+  titulo: string;
   descricao: string;
-  tecnologias: string[];
   link: string;
+  data_criacao: string;
+  profile_id: number;
 }
-

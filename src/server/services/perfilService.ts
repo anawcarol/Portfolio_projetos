@@ -1,5 +1,5 @@
 import { perfilRepository }
-from "../repositories/perfilRepository";
+  from "../repositories/perfilRepository";
 
 /*
   Service responsável pelas regras
@@ -24,6 +24,7 @@ export const perfilService = {
   async createProfile(data: {
     nome: string;
     descricao?: string;
+    foto_perfil: string;
   }) {
 
     /*
@@ -33,6 +34,12 @@ export const perfilService = {
     if (!data.nome?.trim()) {
       throw new Error(
         "Nome obrigatório"
+      );
+    }
+
+    if (!data.foto_perfil?.trim()) {
+      throw new Error(
+        "Foto obrigatória"
       );
     }
 
@@ -81,9 +88,14 @@ export const perfilService = {
     */
     return await perfilRepository.create({
       nome: data.nome.trim(),
+
       descricao:
-        data.descricao?.trim()
+        data.descricao?.trim(),
+
+      foto_perfil:
+        data.foto_perfil.trim()
     });
+
   },
 
 
@@ -96,6 +108,7 @@ export const perfilService = {
     dados: {
       nome?: string;
       descricao?: string;
+      foto_perfil?: string;
     }
   ) {
 

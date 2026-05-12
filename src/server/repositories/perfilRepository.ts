@@ -16,14 +16,14 @@ export const perfilRepository = {
     Busca o profile principal do sistema.
 
     Como existe apenas um,
-    usamos .single()
+    usamos .maybeSingle()
   */
   async getProfile() {
 
     const { data, error } = await supabase
       .from("profiles")
       .select("*")
-      .single();
+      .maybeSingle();
 
     /*
       Se houver erro,
@@ -47,6 +47,7 @@ export const perfilRepository = {
   async create(profile: {
     nome: string;
     descricao?: string;
+    foto_perfil: string;
   }) {
 
     const { data, error } = await supabase
@@ -61,7 +62,7 @@ export const perfilRepository = {
       /*
         Esperamos apenas um.
       */
-      .single();
+      .maybeSingle();
 
     if (error) {
       throw new Error(error.message);
@@ -80,6 +81,7 @@ export const perfilRepository = {
     dados: {
       nome?: string;
       descricao?: string;
+      foto_perfil?: string;
     }
   ) {
 
@@ -101,7 +103,7 @@ export const perfilRepository = {
       */
       .select()
 
-      .single();
+      .maybeSingle();
 
     if (error) {
       throw new Error(error.message);

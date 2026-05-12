@@ -54,7 +54,8 @@ export async function POST(req: Request) {
     const profile =
       await perfilService.createProfile({
         nome: body.nome,
-        descricao: body.descricao
+        descricao: body.descricao,
+        foto_perfil: body.foto_perfil
       });
 
 
@@ -104,7 +105,8 @@ export async function PUT(req: Request) {
         id,
         {
           nome: body.nome,
-          descricao: body.descricao
+          descricao: body.descricao,
+          foto_perfil: body.foto_perfil
         }
       );
 
